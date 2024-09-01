@@ -30,6 +30,7 @@ echo "Initializing a new Node.js project..."
 npm init -y
 
  
+ 
 # Step 6: Create C++ source file
 echo "Creating C++ source file (hello.cpp)..."
 cat <<EOL > hello.cpp
@@ -44,6 +45,7 @@ using v8::Object;
 using v8::String;
 using v8::Value;
 using v8::FunctionTemplate;
+using v8::LocalContext;
 
 void Method(const FunctionCallbackInfo<Value>& args) {
     Isolate* isolate = args.GetIsolate();
@@ -51,15 +53,19 @@ void Method(const FunctionCallbackInfo<Value>& args) {
 }
 
 void Initialize(Local<Object> exports) {
-    exports->Set(String::NewFromUtf8(Isolate::GetCurrent(), "hello").ToLocalChecked(),
-                 FunctionTemplate::New(Isolate::GetCurrent(), Method)->GetFunction());
+    Isolate* isolate = Isolate::GetCurrent();
+    // Create a new context
+    v8::HandleScope handle_scope(isolate);
+    LocalContext context(isolate);
+    
+    exports->Set(String::NewFromUtf8(isolate, "hello").ToLocalChecked(),
+                 FunctionTemplate::New(isolate, Method)->GetFunction(context).ToLocalChecked());
 }
 
 NODE_MODULE(NODE_GYP_MODULE_NAME, Initialize)
 
 }  // namespace demo
 EOL
-
 
 # Step 7: Create binding.gyp file
 echo "Creating binding.gyp file..."
