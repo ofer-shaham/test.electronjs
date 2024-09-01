@@ -15,12 +15,12 @@ jobs:
         with:
           node-version: '22.7.0'  # Specify the latest LTS version explicitly
           
-      - name: Install dependencies
-        run: |
-          npm install -g node-gyp
-          npm install
-
       - name: Run setup script
         run: |
           chmod +x setup_node_gyp.sh
           ./setup_node_gyp.sh
+
+      - name: Install dependencies
+        run: |
+          npm install -g node-gyp
+          npm install
