@@ -59,7 +59,7 @@ NODE_MODULE(NODE_GYP_MODULE_NAME, Initialize)
 
 }  // namespace demo
 EOL
-EOL
+
 
 # Step 7: Create binding.gyp file
 echo "Creating binding.gyp file..."
