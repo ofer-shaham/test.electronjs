@@ -3,21 +3,33 @@
 # Exit on any error
 set -e
 
-# Step 1: Install node-gyp globally
+# Step 1: Install nvm if not already installed
+if ! command -v nvm &> /dev/null; then
+    echo "Installing nvm..."
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+    source ~/.nvm/nvm.sh
+fi
+
+# Step 2: Use the latest LTS version of Node.js
+echo "Using Node.js LTS version..."
+nvm install --lts
+nvm use --lts
+
+# Step 3: Install node-gyp globally
 echo "Installing node-gyp globally..."
 npm install -g node-gyp
 
-# Step 2: Create a new directory for the project
+# Step 4: Create a new directory for the project
 PROJECT_NAME="my-node-gyp-project"
 echo "Creating project directory: $PROJECT_NAME"
 mkdir $PROJECT_NAME
 cd $PROJECT_NAME
 
-# Step 3: Initialize a new Node.js project
+# Step 5: Initialize a new Node.js project
 echo "Initializing a new Node.js project..."
 npm init -y
 
-# Step 4: Create C++ source file
+# Step 6: Create C++ source file
 echo "Creating C++ source file (hello.cpp)..."
 cat <<EOL > hello.cpp
 #include <node.h>
@@ -46,7 +58,7 @@ NODE_MODULE(NODE_GYP_MODULE_NAME, Initialize)
 }  // namespace demo
 EOL
 
-# Step 5: Create binding.gyp file
+# Step 7: Create binding.gyp file
 echo "Creating binding.gyp file..."
 cat <<EOL > binding.gyp
 {
@@ -59,12 +71,12 @@ cat <<EOL > binding.gyp
 }
 EOL
 
-# Step 6: Build the module
+# Step 8: Build the module
 echo "Building the module..."
 node-gyp configure
 node-gyp build
 
-# Step 7: Create a test JavaScript file
+# Step 9: Create a test JavaScript file
 echo "Creating test file (index.js)..."
 cat <<EOL > index.js
 const addon = require('./build/Release/hello');
@@ -72,7 +84,7 @@ const addon = require('./build/Release/hello');
 console.log(addon.hello()); // Outputs: Hello from C++!
 EOL
 
-# Step 8: Run the test
+# Step 10: Run the test
 echo "Running the test..."
 node index.js
 

@@ -1,10 +1,6 @@
-name: Node-Gyp Setup and Test
+name: Node-Gyp Build
 
-on: 
-  push:
-    branches:
-      - main  # Change this to your default branch if necessary
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   build:
@@ -17,12 +13,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'  # Specify the Node.js version you want to use
+          node-version: 'lts'
 
-      - name: Install Dependencies
-        run: npm install -g node-gyp
+      - name: Install dependencies
+        run: |
+          npm install -g node-gyp
+          npm install
 
-      - name: Run Shell Script
+      - name: Run setup script
         run: |
           chmod +x setup_node_gyp.sh
           ./setup_node_gyp.sh
