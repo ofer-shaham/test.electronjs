@@ -29,6 +29,7 @@ cd $PROJECT_NAME
 echo "Initializing a new Node.js project..."
 npm init -y
 
+ 
 # Step 6: Create C++ source file
 echo "Creating C++ source file (hello.cpp)..."
 cat <<EOL > hello.cpp
@@ -42,6 +43,7 @@ using v8::Local;
 using v8::Object;
 using v8::String;
 using v8::Value;
+using v8::FunctionTemplate;
 
 void Method(const FunctionCallbackInfo<Value>& args) {
     Isolate* isolate = args.GetIsolate();
@@ -56,6 +58,7 @@ void Initialize(Local<Object> exports) {
 NODE_MODULE(NODE_GYP_MODULE_NAME, Initialize)
 
 }  // namespace demo
+EOL
 EOL
 
 # Step 7: Create binding.gyp file
